@@ -15,12 +15,12 @@ function App() {
         <h1>🌸 Tenki Yohohoho</h1>
         <p>{language === 'en' ? 'Interactive Japanese Weather Map' : '日本の天気予報インタラクティブマップ'}</p>
         <button onClick={toggleLanguage} className="language-toggle">
-          {language === 'en' ? '日本語' : 'English'}
+          {language === 'en' ? '🇯🇵' : '🇬🇧'}
         </button>
       </header>
 
       <main className="app-main">
-        <JapanMap />
+        <JapanMap language={language} />
       </main>
 
       <footer className="app-footer">
