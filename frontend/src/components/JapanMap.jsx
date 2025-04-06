@@ -45,7 +45,9 @@ const translations = {
     low: "Low",
     date: "📅 Date",
     today: "Today",
-    noData: "ℹ️ No detailed pollen data available"
+    noData: "ℹ️ No detailed pollen data available",
+    mapLegend: "Map Legend",
+    viewableArea: "Viewable Area (data for Japan only)"
   },
   ja: {
     weatherInfo: "🌦️ 天気情報",
@@ -70,7 +72,9 @@ const translations = {
     low: "低い",
     date: "📅 日付",
     today: "今日",
-    noData: "ℹ️ 詳細な花粉データは利用できません"
+    noData: "ℹ️ 詳細な花粉データは利用できません",
+    mapLegend: "地図の凡例",
+    viewableArea: "表示領域（日本国内のみデータ表示）"
   }
 };
 
@@ -192,8 +196,11 @@ const fetchPollenData = async (lat, lng) => {
 };
 
 // Component to add Japan boundary rectangle and enforce map bounds
-function JapanBoundaryRectangle() {
+function JapanBoundaryRectangle({ language = 'en' }) {
   const map = useMap();
+  
+  // Get translations based on language
+  const t = translations[language] || translations.en;
   
   useEffect(() => {
     if (!map) return;
@@ -218,11 +225,11 @@ function JapanBoundaryRectangle() {
       const div = L.DomUtil.create('div', 'info legend');
       div.innerHTML = `
         <div style="background-color: white; padding: 8px; border-radius: 4px; border: 1px solid #ccc;">
-          <div style="margin-bottom: 5px;"><strong>Map Legend</strong></div>
+          <div style="margin-bottom: 5px;"><strong>${t.mapLegend}</strong></div>
           <div style="display: flex; align-items: center;">
             <div style="width: 15px; height: 1px; background-color: #ff7800; 
                  margin-right: 5px; border: 1px dashed #ff7800;"></div>
-            <span>Japan Boundary</span>
+            <span>${t.viewableArea}</span>
           </div>
         </div>
       `;
@@ -235,7 +242,7 @@ function JapanBoundaryRectangle() {
       map.removeControl(legend);
       map.off('drag');
     };
-  }, [map]);
+  }, [map, language, t]);
   
   return null;
 }
@@ -325,7 +332,7 @@ function JapanMap({ language = 'en' }) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <JapanBoundaryRectangle />
+          <JapanBoundaryRectangle language={language} />
           <MapClickHandler onMapClick={handleMapClick} />
           
           {selectedLocation && (
