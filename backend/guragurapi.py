@@ -4,8 +4,10 @@ from flask_cors import CORS
 import numpy as np
 import requests
 import os
+import pandas as pd
 from datetime import datetime
 from dotenv import load_dotenv
+from sklearn.linear_model import LinearRegression
 
 # Load environment variables from .env file
 load_dotenv()
@@ -13,20 +15,92 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# load the model 
+# Try to load the model, or create a new one from earthquake data
 try:
-    linear_regression_model = joblib.load("./model/model.pkl")
-    print("Model loaded successfully")
-except (FileNotFoundError, ModuleNotFoundError, ImportError) as e:
-    print(f"Error loading model: {e}")
-    # Simple fallback model that returns a constant value
-    class FallbackModel:
-        def predict(self, X):
-            # Return low earthquake risk (0.1-0.3 range)
-            return np.array([0.2])
+    # Try different possible paths to find the model file
+    possible_paths = [
+        "./model/model.pkl",
+        "/opt/render/project/src/backend/model/model.pkl",
+        "/opt/render/project/src/model/model.pkl",
+        "model/model.pkl",
+        "../model/model.pkl"
+    ]
     
-    linear_regression_model = FallbackModel()
-    print("Using fallback model")
+    model_loaded = False
+    for path in possible_paths:
+        try:
+            print(f"Attempting to load model from: {path}")
+            if os.path.exists(path):
+                linear_regression_model = joblib.load(path)
+                print(f"Model successfully loaded from {path}")
+                model_loaded = True
+                break
+            else:
+                print(f"Path does not exist: {path}")
+        except Exception as e:
+            print(f"Error loading from {path}: {e}")
+    
+    if not model_loaded:
+        raise FileNotFoundError("Could not find model file in any expected location")
+        
+except Exception as e:
+    print(f"Error loading model: {e}")
+    print("Creating a new model from earthquake data...")
+    
+    # Try to load the earthquake data CSV
+    csv_paths = [
+        "./data/earthquakes.csv",
+        "/opt/render/project/src/backend/data/earthquakes.csv",
+        "/opt/render/project/src/data/earthquakes.csv",
+        "data/earthquakes.csv",
+        "../data/earthquakes.csv"
+    ]
+    
+    data_loaded = False
+    for path in csv_paths:
+        try:
+            if os.path.exists(path):
+                print(f"Loading earthquake data from: {path}")
+                earthquakes_df = pd.read_csv(path)
+                data_loaded = True
+                break
+            else:
+                print(f"Earthquake data path does not exist: {path}")
+        except Exception as e:
+            print(f"Error loading earthquake data from {path}: {e}")
+    
+    # Train the model using the earthquake data
+    if data_loaded:
+        print("Training model from earthquake data...")
+        # Get the latitude, longitude, and magnitude from the CSV
+        X = earthquakes_df[['latitude', 'longitude']].values
+        y = earthquakes_df['mag'].values
+        
+        # Create and train a model
+        linear_regression_model = LinearRegression()
+        linear_regression_model.fit(X, y)
+        print("Model trained successfully from earthquake data")
+    else:
+        print("Could not load earthquake data, creating a simple model...")
+        # Creating a simple LinearRegression model with sample data
+        linear_regression_model = LinearRegression()
+        
+        # Training data: [latitude, longitude] -> earthquake magnitudes
+        X_train = np.array([
+            [35.6762, 139.6503],  # Tokyo (high risk)
+            [34.6937, 135.5022],  # Osaka (high risk)
+            [37.7749, -122.4194], # San Francisco (medium risk)
+            [34.0522, -118.2437], # Los Angeles (medium risk)
+            [51.5074, -0.1278],   # London (low risk)
+            [48.8566, 2.3522],    # Paris (low risk)
+        ])
+        
+        # Earthquake magnitudes (Richter scale)
+        y_train = np.array([6.8, 6.5, 5.7, 5.9, 3.2, 2.9])
+        
+        # Train the simple model
+        linear_regression_model.fit(X_train, y_train)
+        print("Simple model created and trained with sample data")
 
 # Open-Meteo API configuration
 OPEN_METEO_BASE_URL = "https://api.open-meteo.com/v1/forecast"
