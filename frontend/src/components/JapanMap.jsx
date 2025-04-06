@@ -93,15 +93,15 @@ const isWithinJapanBounds = (lat, lng) => {
   }
   
   // Eastern Russia (Part of Sakhalin and Primorsky Krai)
-  if (lng >= 140 && lng <= 146 && lat >= 44 && lat <= 46) {
+  if (lng >= 140 && lng <= 146 && lat >= 45.5 && lat <= 46) {
     // Simplified boundary for parts of Eastern Russia
     return false;
   }
   
-  // Eastern Russia (Kuril Islands dispute area)
-  if (lng >= 142 && lng <= 146 && lat >= 43 && lat <= 44) {
+  // Eastern Russia (Kuril Islands dispute area) - modified to avoid excluding Hokkaido
+  if (lng >= 145.8 && lng <= 146 && lat >= 43 && lat <= 44) {
     // Some of this area is disputed between Japan and Russia
-    // Conservatively exclude it
+    // Conservatively exclude it while preserving Hokkaido
     return false;
   }
   
@@ -303,7 +303,7 @@ function JapanMap({ language = 'en' }) {
           {selectedLocation && (
             <Marker position={[selectedLocation.lat, selectedLocation.lng]}>
               <Popup>
-                <div className="popup-content">
+                <div className="popup-content" style={{ maxHeight: '250px', overflowY: 'auto' }}>
                   <h3>{t.weatherInfo}</h3>
                   
                   {loading && (

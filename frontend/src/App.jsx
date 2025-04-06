@@ -4,6 +4,7 @@ import JapanMap from './components/JapanMap'
 
 function App() {
   const [language, setLanguage] = useState('en');
+  const currentYear = new Date().getFullYear();
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'ja' : 'en');
@@ -25,7 +26,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          © 2024 Tenki Yohohoho | 
+          © {currentYear} Tenki Yohohoho | 
           {language === 'en' 
             ? 'Weather data provided by Open-Meteo' 
             : '天気データはOpen-Meteoによって提供されています'}
