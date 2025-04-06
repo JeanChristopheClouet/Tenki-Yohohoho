@@ -149,7 +149,8 @@ const isWithinJapanBounds = (lat, lng) => {
 // Function to fetch weather data from our API
 const fetchWeatherData = async (lat, lng, lang) => {
   try {
-    const response = await fetch(`http://localhost:5000/weather?lat=${lat}&lon=${lng}&lang=${lang}`);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/weather?lat=${lat}&lon=${lng}&lang=${lang}`);
     if (!response.ok) throw new Error('Weather data fetch failed');
     return await response.json();
   } catch (error) {
@@ -161,7 +162,8 @@ const fetchWeatherData = async (lat, lng, lang) => {
 // Function to fetch earthquake prediction from our API
 const fetchEarthquakePrediction = async (lat, lng) => {
   try {
-    const response = await fetch('http://localhost:5000/predict', {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/predict`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -186,7 +188,8 @@ const fetchEarthquakePrediction = async (lat, lng) => {
 // Function to fetch pollen data from our API
 const fetchPollenData = async (lat, lng) => {
   try {
-    const response = await fetch(`http://localhost:5000/pollen?lat=${lat}&lon=${lng}`);
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/pollen?lat=${lat}&lon=${lng}`);
     if (!response.ok) throw new Error('Pollen data fetch failed');
     return await response.json();
   } catch (error) {
