@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 
 # load the model 
-linear_regression_model = joblib.load("backend/model/model.pkl")
+linear_regression_model = joblib.load("./model/model.pkl")
 
 # Open-Meteo API configuration
 OPEN_METEO_BASE_URL = "https://api.open-meteo.com/v1/forecast"
