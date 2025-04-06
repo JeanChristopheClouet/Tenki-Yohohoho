@@ -1,34 +1,37 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import JapanMap from './components/JapanMap'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [language, setLanguage] = useState('en');
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'ja' : 'en');
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="app-container">
+      <header className="app-header">
+        <h1>🌸 Tenki Yohohoho</h1>
+        <p>{language === 'en' ? 'Interactive Japanese Weather Map' : '日本の天気予報インタラクティブマップ'}</p>
+        <button onClick={toggleLanguage} className="language-toggle">
+          {language === 'en' ? '日本語' : 'English'}
         </button>
+      </header>
+
+      <main className="app-main">
+        <JapanMap />
+      </main>
+
+      <footer className="app-footer">
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          © 2024 Tenki Yohohoho | 
+          {language === 'en' 
+            ? 'Weather data provided by Open-Meteo' 
+            : '天気データはOpen-Meteoによって提供されています'}
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      </footer>
+    </div>
   )
 }
 

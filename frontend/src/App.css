@@ -40,3 +40,106 @@
 .read-the-docs {
   color: #888;
 }
+
+/* App-wide styles */
+.app-container {
+  font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.app-header h1 {
+  color: #e66465;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+}
+
+.app-header p {
+  color: #555;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.language-toggle {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.language-toggle:hover {
+  background-color: #eaeaea;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.app-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eaeaea;
+  text-align: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+/* Map specific styles */
+.map-container {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Popup styles */
+.leaflet-popup-content {
+  min-width: 200px;
+}
+
+.leaflet-popup-content h3 {
+  color: #e66465;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #eaeaea;
+  padding-bottom: 5px;
+}
+
+.leaflet-popup-content h4 {
+  color: #333;
+  margin: 10px 0 5px;
+  font-size: 1rem;
+}
+
+.leaflet-popup-content p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 2rem;
+  }
+  
+  .app-header p {
+    font-size: 1rem;
+  }
+  
+  .map-container {
+    height: 60vh !important;
+  }
+}
