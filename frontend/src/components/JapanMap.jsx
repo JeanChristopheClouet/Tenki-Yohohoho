@@ -87,21 +87,49 @@ const isWithinJapanBounds = (lat, lng) => {
   // Now exclude known non-Japanese regions within the rectangle
   
   // Korean Peninsula (North and South Korea)
-  if (lng >= 122 && lng <= 131 && lat >= 34 && lat <= 43) {
+  if (lng >= 122 && lng <= 129 && lat >= 34 && lat <= 43) {
     // This is a simplified boundary for Korean Peninsula
     return false;
   }
   
-  // Eastern Russia (Part of Sakhalin and Primorsky Krai)
-  if (lng >= 140 && lng <= 146 && lat >= 45.5 && lat <= 46) {
+  // China (northeastern provinces including Heilongjiang)
+  if (lng >= 122 && lng < 130 && lat >= 43 && lat <= 53) {
+    // Northeastern China (parts north of Korea)
+    return false; 
+  }
+  
+  // Eastern Russia (Sakhalin Island)
+  if (lng >= 142 && lng <= 146 && lat >= 45.8 && lat <= 46) {
     // Simplified boundary for parts of Eastern Russia
     return false;
   }
   
-  // Eastern Russia (Kuril Islands dispute area) - modified to avoid excluding Hokkaido
-  if (lng >= 145.8 && lng <= 146 && lat >= 43 && lat <= 44) {
-    // Some of this area is disputed between Japan and Russia
-    // Conservatively exclude it while preserving Hokkaido
+  // Additional Sakhalin Island coverage (northern parts)
+  if (lng >= 142 && lng <= 144 && lat > 46 && lat <= 55) {
+    // Northern Sakhalin
+    return false;
+  }
+  
+  // Eastern Russia (Far eastern disputed area)
+  if (lng >= 146 && lng <= 146 && lat >= 43 && lat <= 44) {
+    // Far eastern edge outside Japanese territory
+    return false;
+  }
+  
+  // Far northern disputed islands
+  if (lng >= 145.8 && lng <= 146 && lat > 45.5 && lat < 46) {
+    // These are disputed territories
+    return false;
+  }
+  
+  // Primorsky Krai (Russian mainland)
+  if (lng >= 130 && lng < 139 && lat >= 42.5 && lat <= 48) {
+    return false;
+  }
+  
+  // Mainland China (adjusted for southern Japan)
+  if (lng >= 122 && lng <= 129 && lat >= 18 && lat < 34) {
+    // China but not affecting southern Japan
     return false;
   }
   
